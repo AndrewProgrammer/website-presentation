@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PeopleForce — Ринок праці та HR-автоматизація</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'Qanelas Soft';
+      src: url('fonts/QanelasSoft-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --pf-green: #12B76A;
+      --pf-green-dark: #0a8a4f;
+      --pf-green-light: #d1fadf;
+      --pf-green-pale: #ecfdf3;
+      --pf-blue: #43B0FF;
+      --pf-blue-dark: #0058A7;
+      --pf-blue-deep: #006FCE;
+      --pf-blue-light: #BDDEFF;
+      --pf-purple: #A955F7;
+      --pf-yellow: #FBC924;
+      --pf-red: #EF4444;
+      --pf-dark: #000F30;
+      --pf-white: #FFFFFF;
+      --pf-light: #FBFCFE;
+      --pf-gray: #8C9BAD;
+      --pf-gray-light: #E5ECF3;
+      --pf-gray-border: #D3DFEB;
+      --slide-w: 1920px;
+      --slide-h: 1080px;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #0a0a1a;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #presentation {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: var(--slide-w);
+      height: var(--slide-h);
+      padding: 80px 100px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(0.96) translateX(20px);
+      transform-origin: center center;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateX(0);
+      z-index: 2;
+    }
+
+    .slide.prev {
+      opacity: 0;
+      transform: scale(1.02) translateX(-20px);
+      z-index: 1;
+    }
+
+    #slide-container {
+      position: absolute;
+      width: var(--slide-w);
+      height: var(--slide-h);
+      transform-origin: 0 0;
+    }
+
+    /* ============ SLIDE BACKGROUNDS ============ */
+    .slide-bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .slide-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .bg-blue { background: #0058A7; color: var(--pf-white); }
+    .bg-dark { background: var(--pf-dark); color: var(--pf-white); }
+    .bg-light { background: var(--pf-light); color: var(--pf-dark); }
+    .bg-green { background: #057747; color: var(--pf-white); }
+
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+    }
+
+    /* ============ TYPOGRAPHY ============ */
+    h1, h2, h3, h4 {
+      font-family: 'Qanelas Soft', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+    }
+
+    .slide h2 { font-size: 64px; margin-bottom: 16px; }
+    .slide h3 { font-size: 34px; margin-bottom: 10px; }
+
+    .slide p, .slide li {
+      font-family: 'Inter', sans-serif;
+      font-size: 26px;
+      line-height: 1.6;
+    }
+
+    .bg-blue h2, .bg-blue h3, .bg-blue p, .bg-blue li,
+    .bg-dark h2, .bg-dark h3, .bg-dark p, .bg-dark li,
+    .bg-green h2, .bg-green h3, .bg-green p, .bg-green li {
+      color: var(--pf-white);
+    }
+
+    /* ============ LOGO ============ */
+    .logo {
+      position: absolute;
+      top: 36px;
+      left: 44px;
+      height: 114px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* ============ BADGE ============ */
+    .badge {
+      display: inline-block;
+      font-family: 'Qanelas Soft', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 28px;
+      border-radius: 28px;
+      margin-bottom: 24px;
+    }
+
+    .bg-light .badge { background: var(--pf-green); color: #fff; }
+    .bg-blue .badge  { background: rgba(255,255,255,0.18); color: #fff; }
+    .bg-dark .badge  { background: var(--pf-green); color: #fff; }
+    .bg-green .badge { background: rgba(255,255,255,0.22); color: #fff; }
+
+    /* ============ ACCENT LINE ============ */
+    .accent-line {
+      width: 100px; height: 5px;
+      border-radius: 3px;
+      margin: 20px 0 32px;
+    }
+    .bg-light .accent-line  { background: var(--pf-green); }
+    .bg-blue .accent-line   { background: var(--pf-green-light); }
+    .bg-dark .accent-line   { background: var(--pf-green); }
+    .bg-green .accent-line  { background: rgba(255,255,255,0.6); }
+
+    /* ============ LISTS ============ */
+    .slide ul { list-style: none; padding: 0; }
+    .slide ul li {
+      position: relative;
+      padding-left: 32px;
+      margin-bottom: 20px;
+    }
+    .slide ul li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 12px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    .bg-light ul li::before { background: var(--pf-green); }
+    .bg-blue ul li::before,
+    .bg-green ul li::before { background: rgba(255,255,255,0.7); }
+    .bg-dark ul li::before  { background: var(--pf-green); }
+
+    /* ============ STAT NUMBERS ============ */
+    .stat-number {
+      font-family: 'Qanelas Soft', sans-serif;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 22px;
+      margin-top: 10px;
+      opacity: 0.75;
+    }
+
+    /* Animated counter */
+    .stat-number[data-count] {
+      display: inline-block;
+    }
+
+    /* ============ WOW PHRASE ============ */
+    .wow {
+      font-family: 'Qanelas Soft', sans-serif;
+      font-weight: 700;
+      font-size: 36px;
+      line-height: 1.35;
+      border-left: 5px solid var(--pf-green);
+      padding-left: 32px;
+      margin-top: 40px;
+    }
+    .bg-light .wow  { color: var(--pf-green); }
+    .bg-blue .wow   { color: var(--pf-green-light); border-left-color: var(--pf-green-light); }
+    .bg-dark .wow   { color: var(--pf-green-light); border-left-color: var(--pf-green); }
+    .bg-green .wow  { color: #fff; border-left-color: rgba(255,255,255,0.6); }
+    .wow.center { border-left: none; padding-left: 0; text-align: center; }
+
+    /* ============ POST-IT NOTE CARDS ============ */
+    .postits { display: grid; gap: 28px; margin-top: 28px; }
+    .postits-3 { grid-template-columns: repeat(3, 1fr); }
+    .postits-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .postit {
+      position: relative;
+      padding: 44px 34px 34px;
+      border-radius: 6px;
+      box-shadow: 4px 6px 20px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.06);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      cursor: default;
+    }
+    .postit:hover {
+      transform: translateY(-8px) rotate(0deg) !important;
+      box-shadow: 8px 16px 40px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.08);
+      z-index: 5;
+    }
+
+    /* tape strip at top */
+    .postit::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 18px;
+      background: rgba(255,255,255,0.45);
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* subtle fold corner */
+    .postit::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 24px; height: 24px;
+      background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.06) 50%);
+      border-radius: 0 0 4px 0;
+    }
+
+    .postit-yellow  { background: #FFF9C4; color: #3e3a00; }
+    .postit-green   { background: #C8E6C9; color: #1b4d1f; }
+    .postit-blue    { background: #BBDEFB; color: #0d3c61; }
+    .postit-pink    { background: #F8BBD0; color: #5a1032; }
+    .postit-orange  { background: #FFE0B2; color: #5a3600; }
+    .postit-purple  { background: #E1BEE7; color: #4a1358; }
+
+    /* glass post-it for dark/blue slides */
+    .postit-glass {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .postit-glass::before {
+      background: rgba(255,255,255,0.2);
+    }
+    .postit-glass::after {
+      background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.06) 50%);
+    }
+    .postit-glass:hover {
+      background: rgba(255,255,255,0.16);
+      box-shadow: 8px 16px 48px rgba(0,0,0,0.3);
+    }
+
+    .postit .emoji {
+      font-size: 52px;
+      display: block;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .postit h3 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+    .postit p {
+      font-size: 21px;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    /* random slight rotations */
+    .postit:nth-child(1) { transform: rotate(-1.5deg); }
+    .postit:nth-child(2) { transform: rotate(1deg); }
+    .postit:nth-child(3) { transform: rotate(-0.8deg); }
+    .postit:nth-child(4) { transform: rotate(1.2deg); }
+
+    /* ============ LEGACY CARDS (for compare blocks) ============ */
+    .cards { display: grid; gap: 24px; margin-top: 28px; }
+    .cards-3 { grid-template-columns: repeat(3, 1fr); }
+
+    /* ============ LAYOUTS ============ */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .two-col-55 {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .stats-row {
+      display: flex;
+      gap: 80px;
+      margin-top: 36px;
+    }
+    .flex-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
+
+    /* ============ COMPARE BLOCKS ============ */
+    .compare-blocks {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-width: 520px;
+    }
+    .compare-blocks img { width: 100%; }
+
+    /* ============ LINES DECORATION ============ */
+    .lines-decoration {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .lines-decoration img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* ============ FRAGMENT ANIMATIONS ============ */
+    .frag {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .frag.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* postit frag overrides — pop in with slight rotation */
+    .postit.frag {
+      transform: translateY(40px) scale(0.92);
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .postit.frag.show:nth-child(1) { transform: rotate(-1.5deg) scale(1); }
+    .postit.frag.show:nth-child(2) { transform: rotate(1deg) scale(1); }
+    .postit.frag.show:nth-child(3) { transform: rotate(-0.8deg) scale(1); }
+    .postit.frag.show:nth-child(4) { transform: rotate(1.2deg) scale(1); }
+
+    .frag[data-d="1"] { transition-delay: 0.08s; }
+    .frag[data-d="2"] { transition-delay: 0.16s; }
+    .frag[data-d="3"] { transition-delay: 0.24s; }
+    .frag[data-d="4"] { transition-delay: 0.36s; }
+    .frag[data-d="5"] { transition-delay: 0.48s; }
+    .frag[data-d="6"] { transition-delay: 0.60s; }
+    .frag[data-d="7"] { transition-delay: 0.72s; }
+
+    /* ============ PROGRESS BAR ============ */
+    #progress {
+      position: fixed;
+      bottom: 0; left: 0;
+      height: 4px;
+      background: var(--pf-green);
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ============ NAV ============ */
+    .nav-btn {
+      position: fixed;
+      bottom: 28px;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 100;
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+    #prev-btn { right: 90px; }
+    #next-btn { right: 32px; }
+
+    #slide-counter {
+      position: fixed;
+      bottom: 38px;
+      left: 44px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      z-index: 100;
+      letter-spacing: 0.05em;
+    }
+
+    /* ============ HELPERS ============ */
+    .muted { opacity: 0.6; }
+    .small { font-size: 19px; }
+    .mt-sm { margin-top: 12px; }
+    .mt-md { margin-top: 28px; }
+    .mt-lg { margin-top: 48px; }
+    .max-700 { max-width: 700px; }
+    .max-800 { max-width: 800px; }
+    .max-900 { max-width: 900px; }
+    strong { font-weight: 600; }
+
+    /* ============ PULSE ANIMATION for stat highlights ============ */
+    @keyframes pulse-glow {
+      0%, 100% { text-shadow: 0 0 0 transparent; }
+      50% { text-shadow: 0 0 30px rgba(18, 183, 106, 0.3); }
+    }
+    .stat-number.glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+    /* ============ FLOATING ANIMATION for decorative elements ============ */
+    @keyframes float-subtle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    .float-anim { animation: float-subtle 6s ease-in-out infinite; }
+    .float-anim-slow { animation: float-subtle 8s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+
+<div id="presentation">
+  <div id="slide-container">
+
+    <!-- ===== SLIDE 1: РИНОК ===== -->
+    <section class="slide bg-blue" id="s1">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:70px;">
+          <span class="badge frag" data-d="0">РИНОК</span>
+          <h2 class="frag max-700" data-d="1">Ринок праці в Україні працює в умовах структурного дефіциту</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="stats-row">
+          <div class="frag" data-d="3">
+            <p class="stat-number glow" style="font-size:120px; color:#fff;" data-count="83" data-suffix="%">0%</p>
+            <p class="stat-label max-700" style="color:rgba(255,255,255,0.75);">компаній продовжують активний найм</p>
+            <p class="small muted mt-sm" style="color:rgba(255,255,255,0.4);">Happy Monday, 2025</p>
+          </div>
+          <div class="frag" data-d="4">
+            <p class="stat-number glow" style="font-size:120px; color:#fff;" data-count="90" data-suffix="%+">0%</p>
+            <p class="stat-label max-700" style="color:rgba(255,255,255,0.75);">бізнесів відчувають дефіцит кадрів</p>
+            <p class="small muted mt-sm" style="color:rgba(255,255,255,0.4);">Gradus / HR дослідження</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 2: ДЕФІЦИТ ===== -->
+    <section class="slide bg-blue" id="s2">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:70px;">
+          <span class="badge frag" data-d="0">ДЕФІЦИТ</span>
+          <h2 class="frag max-700" data-d="1">Дефіцит кадрів має системний характер</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="two-col-55 mt-md">
+          <div>
+            <p class="frag" data-d="2" style="margin-bottom:24px;color:rgba(255,255,255,0.7);">Основні фактори:</p>
+            <ul>
+              <li class="frag" data-d="3">Міграція</li>
+              <li class="frag" data-d="4">Мобілізація</li>
+              <li class="frag" data-d="5">Демографічні зміни</li>
+            </ul>
+          </div>
+          <div class="frag" data-d="4" style="display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;">
+              <p class="stat-number glow" style="font-size:110px;color:var(--pf-green-light);" data-count="5" data-prefix="~" data-suffix="–7%">0</p>
+              <p class="stat-label" style="color:rgba(255,255,255,0.7);">компаній не відчувають<br>кадрового дефіциту</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="wow frag mt-lg" data-d="6">
+          Бізнеси змушені працювати в умовах постійного обмеження людського ресурсу.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 3: ІНДУСТРІЇ ===== -->
+    <section class="slide bg-blue" id="s3">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:50px;">
+          <span class="badge frag" data-d="0">ІНДУСТРІЇ</span>
+          <h2 class="frag" data-d="1">Різні ринки — одна логіка</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="postits postits-3">
+          <div class="postit postit-glass frag" data-d="3">
+            <span class="emoji">⚡</span>
+            <h3>Miltech</h3>
+            <p>Швидке масштабування команд</p>
+          </div>
+          <div class="postit postit-glass frag" data-d="4">
+            <span class="emoji">🛒</span>
+            <h3>Рітейл</h3>
+            <p>Масовий найм та висока плинність</p>
+          </div>
+          <div class="postit postit-glass frag" data-d="5">
+            <span class="emoji">🏦</span>
+            <h3>Банки</h3>
+            <p>Високі вимоги до контролю та комплаєнсу</p>
+          </div>
+        </div>
+
+        <div class="wow frag mt-lg" data-d="6" style="font-size:26px;">
+          Незважаючи на різні контексти, всі компанії стикаються з однаковим викликом — необхідністю ефективніше працювати з людьми, яких стає менше.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 4: ЗРОСТАННЯ ===== -->
+    <section class="slide bg-blue" id="s4">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:80px;">
+          <span class="badge frag" data-d="0">ЗРОСТАННЯ</span>
+          <h2 class="frag max-800" data-d="1">Зростання бізнесу збільшує навантаження на HR&#8209;процеси</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="mt-md">
+          <ul>
+            <li class="frag" data-d="3">Компанії масштабуються швидше, ніж процеси</li>
+            <li class="frag" data-d="4">Збільшується кількість кадрових операцій</li>
+          </ul>
+        </div>
+
+        <div class="wow frag mt-lg" data-d="5" style="font-size:28px;">
+          У швидкозростаючих компаніях виклик полягає не лише в наймі, а в здатності масштабувати процеси разом із бізнесом.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 5: КЛЮЧОВІ РОЛІ ===== -->
+    <section class="slide bg-blue" id="s5">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:50px;">
+          <span class="badge frag" data-d="0">КЛЮЧОВІ РОЛІ</span>
+          <h2 class="frag max-700" data-d="1">Ключові ролі стають критичним ресурсом</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="two-col mt-md">
+          <div>
+            <ul>
+              <li class="frag" data-d="3">Адаптація нового спеціаліста може займати <strong>3–6 місяців</strong></li>
+              <li class="frag" data-d="4">Втрата співробітника = втрата знань + затримка в розвитку продукту</li>
+            </ul>
+            <p class="frag small mt-lg" data-d="5" style="color:rgba(255,255,255,0.6);">
+              В окремих функціях, зокрема в інженерних командах, цей виклик проявляється ще сильніше.
+            </p>
+          </div>
+          <div class="frag" data-d="4" style="display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;">
+              <p class="stat-number glow" style="font-size:140px;color:var(--pf-green-light);">3–6</p>
+              <p class="stat-label" style="font-size:22px;color:rgba(255,255,255,0.75);">місяців на адаптацію</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="wow frag mt-md" data-d="6" style="font-size:28px;">
+          "Цінність співробітника сьогодні визначається його впливом на швидкість бізнесу."
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 6: ЕФЕКТИВНІСТЬ ===== -->
+    <section class="slide bg-blue" id="s6">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:70px;">
+          <span class="badge frag" data-d="0">ЕФЕКТИВНІСТЬ</span>
+          <h2 class="frag max-800" data-d="1">Час співробітників витрачається на операційні процеси</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="postits postits-4 mt-md">
+          <div class="postit postit-glass frag" data-d="3">
+            <span class="emoji">📋</span>
+            <h3>Ручні погодження</h3>
+          </div>
+          <div class="postit postit-glass frag" data-d="4">
+            <span class="emoji">💬</span>
+            <h3>Запити до HR</h3>
+          </div>
+          <div class="postit postit-glass frag" data-d="5">
+            <span class="emoji">📄</span>
+            <h3>Документообіг</h3>
+          </div>
+          <div class="postit postit-glass frag" data-d="6">
+            <span class="emoji">🔗</span>
+            <h3>Відсутність єдиного середовища</h3>
+          </div>
+        </div>
+
+        <div class="wow frag mt-lg" data-d="7" style="font-size:28px;">
+          "Ми оптимізуємо бізнес-процеси, але часто не оптимізуємо досвід співробітника."
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 7: RETENTION ===== -->
+    <section class="slide bg-blue" id="s7">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:50px;">
+          <span class="badge frag" data-d="0">RETENTION</span>
+          <h2 class="frag max-700" data-d="1">Фокус зміщується з найму на утримання</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="two-col mt-md">
+          <div>
+            <ul>
+              <li class="frag" data-d="3">
+                Retention входить у <strong>топ-3 пріоритетів HR</strong>
+                <br><span class="small" style="color:rgba(255,255,255,0.5);">Deloitte Human Capital Trends</span>
+              </li>
+              <li class="frag" data-d="4">
+                Заміна співробітника може коштувати <strong>50–200%</strong> його річної компенсації
+                <br><span class="small" style="color:rgba(255,255,255,0.5);">SHRM / глобальні дослідження</span>
+              </li>
+            </ul>
+            <div class="wow frag mt-md" data-d="6">
+              "Утримання сьогодні — це новий найм."
+            </div>
+          </div>
+          <div class="frag" data-d="5" style="display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;">
+              <p class="stat-number glow" style="font-size:120px;color:var(--pf-green-light);">50–200%</p>
+              <p class="stat-label" style="font-size:24px;color:rgba(255,255,255,0.7);">вартість заміни<br>одного співробітника</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 8: СЕРВІС ===== -->
+    <section class="slide bg-blue" id="s8">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:70px;">
+          <span class="badge frag" data-d="0">СЕРВІС</span>
+          <h2 class="frag max-800" data-d="1">Досвід співробітника стає критичним фактором</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="postits postits-4 mt-md">
+          <div class="postit postit-glass frag" data-d="3">
+            <span class="emoji">⚡</span>
+            <h3>Швидкість HR-відповідей</h3>
+          </div>
+          <div class="postit postit-glass frag" data-d="4">
+            <span class="emoji">👁</span>
+            <h3>Прозорість процесів</h3>
+          </div>
+          <div class="postit postit-glass frag" data-d="5">
+            <span class="emoji">📱</span>
+            <h3>Доступність інформації</h3>
+          </div>
+          <div class="postit postit-glass frag" data-d="6">
+            <span class="emoji">🤝</span>
+            <h3>Зручність взаємодії</h3>
+          </div>
+        </div>
+
+        <div class="wow frag mt-lg" data-d="7" style="font-size:28px;">
+          "HR — це сервіс, який співробітник отримує щодня."
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 9: ДОКУМЕНТООБІГ ===== -->
+    <section class="slide bg-blue" id="s9">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:50px;">
+          <span class="badge frag" data-d="0">ДОКУМЕНТООБІГ</span>
+          <h2 class="frag max-700" data-d="1">Зростання компанії = зростання складності процесів</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <div class="postits postits-3">
+          <div class="postit postit-glass frag" data-d="3">
+            <span class="emoji">📄</span>
+            <h3>Більше найму</h3>
+            <p>→ більше документів</p>
+          </div>
+          <div class="postit postit-glass frag" data-d="4">
+            <span class="emoji">⚠️</span>
+            <h3>Більше змін</h3>
+            <p>→ більше ризиків</p>
+          </div>
+          <div class="postit postit-glass frag" data-d="5">
+            <span class="emoji">👥</span>
+            <h3>Більше людей</h3>
+            <p>→ складніша структура</p>
+          </div>
+        </div>
+
+        <div class="wow frag mt-lg" data-d="6">
+          "Складність процесів зростає швидше, ніж бізнес."
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 10: РИЗИКИ ===== -->
+    <section class="slide bg-blue" id="s10">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:70px;">
+          <span class="badge frag" data-d="0">РИЗИКИ</span>
+          <h2 class="frag max-700" data-d="1">HR-процеси стають фактором ризику</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <p class="frag mt-md" data-d="2" style="color:rgba(255,255,255,0.7);">Помилки або затримки в кадрових процесах можуть призводити до:</p>
+
+        <div class="postits postits-3 mt-md">
+          <div class="postit postit-glass frag" data-d="3" style="border-left:4px solid var(--pf-red);">
+            <span class="emoji">⚖️</span>
+            <h3>Юридичні ризики</h3>
+            <p style="color:rgba(255,255,255,0.7);">Порушення трудового законодавства та регуляторних вимог</p>
+          </div>
+          <div class="postit postit-glass frag" data-d="4" style="border-left:4px solid var(--pf-yellow);">
+            <span class="emoji">📉</span>
+            <h3>Операційні втрати</h3>
+            <p style="color:rgba(255,255,255,0.7);">Затримки, помилки в нарахуваннях, дублювання процесів</p>
+          </div>
+          <div class="postit postit-glass frag" data-d="5" style="border-left:4px solid var(--pf-blue-light);">
+            <span class="emoji">👥</span>
+            <h3>Втрата ефективності команд</h3>
+            <p style="color:rgba(255,255,255,0.7);">Демотивація, зниження продуктивності, відтік талантів</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 11: ПЕРЕХІД ===== -->
+    <section class="slide bg-blue" id="s11">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div class="flex-center" style="padding-bottom:60px;">
+          <h2 class="frag" data-d="1" style="font-size:72px;max-width:750px;text-align:center;">Це змінює роль HR</h2>
+          <div class="accent-line frag" data-d="2" style="margin:24px auto;"></div>
+          <p class="frag" data-d="3" style="font-size:26px;max-width:680px;text-align:center;color:rgba(255,255,255,0.88);line-height:1.6;">
+            HR переходить від адміністративної функції до функції управління ефективністю, процесами та ризиками.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 12: АВТОМАТИЗАЦІЯ ===== -->
+    <section class="slide bg-blue" id="s12">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div style="margin-top:90px;">
+          <span class="badge frag" data-d="0">АВТОМАТИЗАЦІЯ</span>
+          <h2 class="frag max-800" data-d="1">Системність стає необхідністю</h2>
+          <div class="accent-line frag" data-d="2"></div>
+        </div>
+
+        <p class="frag mt-lg" data-d="3" style="font-size:24px;color:rgba(255,255,255,0.8);max-width:700px;">
+          В умовах дефіциту кадрів та зростаючої складності ручне управління процесами більше не є ефективним.
+        </p>
+
+        <div class="wow frag mt-lg" data-d="4" style="font-size:36px;border-left-width:6px;">
+          "Складність не масштабується людьми.<br>Вона масштабується системами."
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SLIDE 13: ФІНАЛ ===== -->
+    <section class="slide bg-blue" id="s13">
+      <div class="slide-bg">
+        <img src="../Assets/template-google-slides-design-01.svg" alt="">
+      </div>
+      <img src="../Assets/Frame-1.png" class="logo" alt="PeopleForce">
+
+      <div class="slide-content">
+        <div class="flex-center" style="padding-bottom:60px;">
+          <span class="badge frag" data-d="0">ФІНАЛ</span>
+          <h2 class="frag mt-md" data-d="1" style="font-size:60px;max-width:800px;text-align:center;">
+            Ключовий ресурс — це ефективність людей
+          </h2>
+          <p class="frag mt-md" data-d="2" style="font-size:22px;max-width:700px;text-align:center;color:rgba(255,255,255,0.75);line-height:1.65;">
+            Сьогодні виграють ті компанії, які здатні не лише залучати людей, а створювати умови для їх максимально ефективної роботи.
+          </p>
+          <div class="wow center frag mt-lg" data-d="3" style="font-size:38px;color:var(--pf-green-light);max-width:900px;">
+            "Перевагу отримує не той, у кого більше людей, а той, у кого краще працюють процеси."
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /slide-container -->
+</div><!-- /presentation -->
+
+<div id="progress" style="width:0%;"></div>
+<button class="nav-btn" id="prev-btn" aria-label="Previous">‹</button>
+<button class="nav-btn" id="next-btn" aria-label="Next">›</button>
+<div id="slide-counter"></div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const container = document.getElementById('slide-container');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('slide-counter');
+  const total = slides.length;
+  let current = 0;
+
+  // --- Scaling ---
+  function scale() {
+    const sw = window.innerWidth;
+    const sh = window.innerHeight;
+    const ratio = Math.min(sw / 1920, sh / 1080);
+    container.style.transform = `scale(${ratio})`;
+    container.style.width = '1920px';
+    container.style.height = '1080px';
+    const ox = (sw - 1920 * ratio) / 2;
+    const oy = (sh - 1080 * ratio) / 2;
+    container.style.left = ox + 'px';
+    container.style.top = oy + 'px';
+  }
+  window.addEventListener('resize', scale);
+  scale();
+
+  // --- Animated counters ---
+  function animateCounters(slide) {
+    slide.querySelectorAll('[data-count]').forEach(el => {
+      const target = parseInt(el.dataset.count);
+      const suffix = el.dataset.suffix || '';
+      const prefix = el.dataset.prefix || '';
+      const duration = 1200;
+      const start = performance.now();
+      el._counted = true;
+
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(target * eased);
+        el.textContent = prefix + current + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // --- Show slide ---
+  function showSlide(index, direction) {
+    if (index < 0 || index >= total) return;
+
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i !== index) {
+        s.querySelectorAll('.frag').forEach(f => f.classList.remove('show'));
+      }
+    });
+
+    if (direction === 'back' && current !== index) {
+      slides[current].classList.add('prev');
+    }
+
+    current = index;
+    slides[current].classList.add('active');
+
+    // animate fragments
+    const frags = slides[current].querySelectorAll('.frag');
+    requestAnimationFrame(() => {
+      frags.forEach(f => f.classList.add('show'));
+    });
+
+    // animate counters
+    setTimeout(() => animateCounters(slides[current]), 300);
+
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    history.replaceState(null, '', '#' + (current + 1));
+  }
+
+  // --- Navigation ---
+  function next() { showSlide(current + 1, 'forward'); }
+  function prev() { showSlide(current - 1, 'back'); }
+
+  document.getElementById('next-btn').addEventListener('click', next);
+  document.getElementById('prev-btn').addEventListener('click', prev);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault(); next();
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); prev();
+    }
+    if (e.key === 'Home') { e.preventDefault(); showSlide(0, 'back'); }
+    if (e.key === 'End') { e.preventDefault(); showSlide(total - 1, 'forward'); }
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  container.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  container.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+  });
+
+  // Init from hash
+  const hash = parseInt(location.hash.replace('#', ''));
+  showSlide((hash >= 1 && hash <= total) ? hash - 1 : 0, 'forward');
+})();
+</script>
+
+</body>
+</html>
